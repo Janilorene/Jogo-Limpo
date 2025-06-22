@@ -11,10 +11,10 @@ async function carregarEPopularDadosUsuario() {
 
         // Requisições paralelas para agilizar
         const [resProgresso, resUsuario, resConquistas, resPosts] = await Promise.all([
-            fetch(`http://localhost:3000/progresso?usuario_id=${usuarioId}`),
-            fetch(`http://localhost:3000/usuarios/${usuarioId}`),
-            fetch("http://localhost:3000/conquistas"),
-            fetch("http://localhost:3000/posts")
+            fetch(`https://jogo-limpo.vercel.app/progresso?usuario_id=${usuarioId}`),
+            fetch(`https://jogo-limpo.vercel.app/usuarios/${usuarioId}`),
+            fetch("https://jogo-limpo.vercel.app/conquistas"),
+            fetch("https://jogo-limpo.vercel.app/posts")
         ]);
 
         if (!resProgresso.ok) throw new Error("Erro ao buscar progresso.");

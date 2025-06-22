@@ -28,7 +28,7 @@ document.getElementById("formulario").addEventListener("submit", function (e) {
     resultadoDiv.innerHTML = mensagem;
     resultadoDiv.style.display = "block";
 
-    fetch("http://localhost:3000/respostas", {
+    fetch("https://jogo-limpo.vercel.app/respostas", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

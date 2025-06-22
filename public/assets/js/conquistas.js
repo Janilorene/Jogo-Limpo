@@ -9,7 +9,7 @@ if (!usuarioCorrente || !usuarioCorrente.id) {
 
 async function salvarConquistasNoBackend(usuarioId, novasConquistas) {
   try {
-    const res = await fetch(`http://localhost:3000/usuarios/${usuarioId}`, {
+    const res = await fetch(`https://jogo-limpo.vercel.app/usuarios/${usuarioId}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ conquistas: novasConquistas }),
@@ -28,18 +28,18 @@ async function carregarConquistas(usuarioLogadoId) {
 
   try {
     // Busca usuário
-    const resUsuario = await fetch(`http://localhost:3000/usuarios/${usuarioLogadoId}`);
+    const resUsuario = await fetch(`https://jogo-limpo.vercel.app/usuarios/${usuarioLogadoId}`);
     if (!resUsuario.ok) throw new Error('Falha ao carregar usuário');
     const usuario = await resUsuario.json();
 
     // Busca progresso do usuário
-    const resProgresso = await fetch(`http://localhost:3000/progresso?usuario_id=${usuarioLogadoId}`);
+    const resProgresso = await fetch(`https://jogo-limpo.vercel.app/progresso?usuario_id=${usuarioLogadoId}`);
     if (!resProgresso.ok) throw new Error('Falha ao carregar progresso');
     const progressoArray = await resProgresso.json();
     const progresso = progressoArray[0] || { dias_sem_jogar: 0 };
 
     // Busca todas conquistas possíveis
-    const resConquistas = await fetch(`http://localhost:3000/conquistas`);
+    const resConquistas = await fetch(`https://jogo-limpo.vercel.app/conquistas`);
     if (!resConquistas.ok) throw new Error('Falha ao carregar conquistas');
     const conquistasTodas = await resConquistas.json();
 

@@ -45,5 +45,5 @@ app.patch('/api/notifications/:id/read', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando: http://localhost:${PORT}`);
+  console.log(`✅ Servidor rodando: https://jogo-limpo.vercel.app${PORT}`);
 });

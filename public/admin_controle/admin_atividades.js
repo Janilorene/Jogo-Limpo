@@ -1,5 +1,5 @@
-const API_ATIVIDADES = "http://localhost:3000/atividadesDisponiveis";
-const API_CONQUISTAS = "http://localhost:3000/conquistas";
+const API_ATIVIDADES = "https://jogo-limpo.vercel.app/atividadesDisponiveis";
+const API_CONQUISTAS = "https://jogo-limpo.vercel.app/conquistas";
 
 const form = document.getElementById("formAtividade");
 const lista = document.getElementById("listaAtividades");

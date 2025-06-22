@@ -193,7 +193,7 @@ function createPostCard(post) {
     likeButton.replaceChild(newIcon, likeButton.firstChild);
 
     // Salva no backend
-    fetch(`http://localhost:3000/posts/${post.id}`, {
+    fetch(`https://jogo-limpo.vercel.app/posts/${post.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -249,7 +249,7 @@ function createPostCard(post) {
       date: new Date().toISOString()
     };
 
-    fetch(`http://localhost:3000/posts/${post.id}`, {
+    fetch(`https://jogo-limpo.vercel.app/posts/${post.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ comments: [...post.comments, newComment] })
@@ -332,7 +332,7 @@ modalForm.addEventListener('submit', e => {
     comments: []
   };
 
-  fetch("http://localhost:3000/posts", {
+  fetch("https://jogo-limpo.vercel.app/posts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(newPost)
@@ -354,7 +354,7 @@ modalForm.addEventListener('submit', e => {
 
 // Carregar posts ao iniciar
 document.addEventListener('DOMContentLoaded', () => {
-  fetch("http://localhost:3000/posts")
+  fetch("https://jogo-limpo.vercel.app/posts")
     .then(res => {
       if (!res.ok) throw new Error(`Erro: ${res.status}`);
       return res.json();
