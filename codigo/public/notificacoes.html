@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Notificações</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0b1d3a; 
+      color: #e0e6f1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-weight: 700;
+      margin-bottom: 30px;
+      color: #d1d9ff;
+      text-shadow: 0 0 5px rgba(209, 217, 255, 0.7);
+      user-select: none;
+    }
+
+    .notification-bell {
+      position: relative;
+      cursor: pointer;
+      font-size: 2.8rem;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      background: #1e2f57;
+      box-shadow: 0 0 10px #27427b88;
+      transition: background 0.3s ease;
+      user-select: none;
+    }
+
+    .notification-bell:hover {
+      background: #3457a1;
+      box-shadow: 0 0 15px #4973d8cc;
+    }
+
+    .notification-count {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      background: #e03e3e;
+      color: #fff;
+      border-radius: 50%;
+      padding: 4px 9px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 0 5px #e03e3eaa;
+      user-select: none;
+      display: none;
+    }
+
+    .notification-dropdown {
+      display: none;
+      position: absolute;
+      top: 68px;
+      right: 0;
+      background: #162541;
+      border-radius: 8px;
+      width: 320px;
+      max-height: 380px;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      z-index: 100;
+      user-select: none;
+      border: 1px solid #2a3a6a;
+    }
+
+    .notification-dropdown.active {
+      display: block;
+    }
+
+    .notification {
+      padding: 12px 16px;
+      border-bottom: 1px solid #2a3a6a;
+      font-size: 14px;
+      line-height: 1.3;
+      cursor: default;
+      transition: background 0.2s ease;
+      color: #c9d1ff;
+    }
+
+    .notification:last-child {
+      border-bottom: none;
+    }
+
+    .notification strong {
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 13px;
+      color: #a1b2ff;
+      margin-right: 6px;
+      user-select: none;
+    }
+
+    .notification.unread {
+      background: #24365c;
+      box-shadow: inset 3px 0 0 #7a9eff;
+    }
+
+    .notification-dropdown::-webkit-scrollbar {
+      width: 8px;
+    }
+    .notification-dropdown::-webkit-scrollbar-track {
+      background: #162541;
+    }
+    .notification-dropdown::-webkit-scrollbar-thumb {
+      background-color: #4e6bc2;
+      border-radius: 10px;
+      border: 2px solid #162541;
+    }
+
+    .info-text {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #a0a8d9;
+      max-width: 350px;
+      text-align: center;
+      user-select: none;
+    }
+
+    @media (max-width: 400px) {
+      .notification-dropdown {
+        width: 90vw;
+        max-height: 300px;
+      }
+      body {
+        padding: 20px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Notificações - Jogo Limpo</h1>
+
+  <div class="notification-bell" onclick="toggleDropdown()" aria-label="Abrir notificações" role="button" tabindex="0" onkeypress="if(event.key==='Enter') toggleDropdown()">
+    🔔
+    <span class="notification-count" id="notificationCount">0</span>
+    <div class="notification-dropdown" id="notificationDropdown" role="list" aria-live="polite"></div>
+  </div>
+
+  <div class="info-text">
+    Receba mensagens de incentivo e alertas para ajudar na sua jornada de recuperação.
+  </div>
+
+  <script>
+    const dropdown = document.getElementById('notificationDropdown');
+    const countSpan = document.getElementById('notificationCount');
+
+    async function fetchNotifications() {
+      const res = await fetch('/api/notifications');
+      return res.json();
+    }
+
+    async function renderNotifications() {
+      const notifications = await fetchNotifications();
+      dropdown.innerHTML = '';
+      let unreadCount = 0;
+
+      notifications.forEach(n => {
+        if (!n.read) unreadCount++;
+        const div = document.createElement('div');
+        div.className = 'notification' + (n.read ? '' : ' unread');
+        div.innerHTML = `<strong>${n.type.toUpperCase()}</strong>: ${n.message}`;
+        dropdown.appendChild(div);
+      });
+
+      countSpan.textContent = unreadCount;
+      countSpan.style.display = unreadCount ? 'inline-block' : 'none';
+    }
+
+    function toggleDropdown() {
+      dropdown.classList.toggle('active');
+    }
+
+    function showPushNotification(title, body) {
+      if (Notification.permission === 'granted') {
+        new Notification(title, { body });
+      }
+    }
+
+    function sendEmailNotificationSimulada(mensagem) {
+      console.log('[Simulando envio de e-mail] ✉️', mensagem);
+    }
+
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    setTimeout(async () => {
+      const nova = {
+        type: 'motivacional',
+        message: 'Continue firme! Cada dia conta.'
+      };
+      await fetch('/api/notifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(nova)
+      });
+
+      renderNotifications();
+      showPushNotification('Nova Notificação', nova.message);
+      sendEmailNotificationSimulada(nova.message);
+    }, 3000);
+
+    renderNotifications();
+  </script>
+
+</body>
+</html>
