@@ -1,6 +1,6 @@
 const LOGIN_URL = "login.html";
 let RETURN_URL = "pagina_usuario.html";
-const API_URL = "http://localhost:3000/usuarios";
+const API_URL = "https://jogo-limpo.vercel.app/usuarios";
 
 let db_usuarios = [];
 let usuarioCorrente = {};
@@ -70,7 +70,7 @@ function addUser(nome, login, senha, email) {
         datas_confirmadas: []
       };
 
-      fetch("http://localhost:3000/progresso", {
+      fetch("https://jogo-limpo.vercel.app/progresso", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(progressoInicial),
