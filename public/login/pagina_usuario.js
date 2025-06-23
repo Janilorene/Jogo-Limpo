@@ -35,7 +35,7 @@ function exibirMensagem(msg) {
 
 async function carregarAtividadesDisponiveis() {
   try {
-    const res = await fetch("http://localhost:3000/atividadesDisponiveis");
+    const res = await fetch("/api/atividadesDisponiveis");
     if (!res.ok) throw new Error("Erro ao carregar atividades disponíveis");
     const atividades = await res.json();
     atividadesDisponiveisGlobal = atividades;  
@@ -82,7 +82,7 @@ async function mostrarUsuario() {
         usuario.atividades = atividadesValidas;
 
         try {
-          const salvar = await fetch(`http://localhost:3000/usuarios/${usuario.id}`, {
+          const salvar = await fetch(`/api/usuarios/${usuario.id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ atividades: usuario.atividades })
@@ -120,7 +120,7 @@ async function mostrarUsuario() {
 
 async function carregarAtividadesDisponiveisParaFormulario(usuario) {
   try {
-    const res = await fetch("http://localhost:3000/atividadesDisponiveis");
+    const res = await fetch("/api/atividadesDisponiveis");
     if (!res.ok) throw new Error("Erro ao carregar atividades disponíveis");
     const atividades = await res.json();
 
@@ -184,7 +184,7 @@ function registrarAtividadesConcluidas(usuario) {
     if (!usuario.atividades) usuario.atividades = [];
 
     try {
-      const res = await fetch("http://localhost:3000/atividadesDisponiveis");
+      const res = await fetch("/api/atividadesDisponiveis");
       if (!res.ok) throw new Error("Erro ao carregar atividades disponíveis");
       const atividadesDisponiveis = await res.json();
 
@@ -203,7 +203,7 @@ function registrarAtividadesConcluidas(usuario) {
       });
 
       // Salva no backend
-      const salvar = await fetch(`http://localhost:3000/usuarios/${usuario.id}`, {
+      const salvar = await fetch(`/api/usuarios/${usuario.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ atividades: usuario.atividades })
@@ -229,13 +229,13 @@ function registrarAtividadesConcluidas(usuario) {
 }
 
 async function carregarProgresso(usuarioId) {
-  const res = await fetch(`http://localhost:3000/progresso?usuario_id=${usuarioId}`);
+  const res = await fetch(`/api/progresso?usuario_id=${usuarioId}`);
   const progresso = await res.json();
   return progresso[0];
 }
 
 async function salvarProgresso(progresso) {
-  await fetch(`http://localhost:3000/progresso/${progresso.id}`, {
+  await fetch(`/api/progresso/${progresso.id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(progresso)
@@ -243,7 +243,7 @@ async function salvarProgresso(progresso) {
 }
 async function atualizarAvatar(usuario, progresso) {
   try {
-    const res = await fetch("http://localhost:3000/avatares");
+    const res = await fetch("/api/avatares");
     const avatares = await res.json();
 
     const dias = progresso.dias_sem_jogar || 0;
@@ -257,7 +257,7 @@ async function atualizarAvatar(usuario, progresso) {
       usuario.avatarDesbloqueado = avatarDesbloqueado.img;
 
       // Atualiza backend e sessionStorage
-      await fetch(`http://localhost:3000/usuarios/${usuario.id}`, {
+      await fetch(`/api/usuarios/${usuario.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ avatarDesbloqueado: avatarDesbloqueado.img })
