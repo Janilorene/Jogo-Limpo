@@ -15,6 +15,14 @@ server.use((req, res, next) => {
 });
 
 server.use(middlewares);
+const cors = require('cors');
+server.use(cors({
+  origin: '*', // ou substitua por sua URL: 'https://seu-frontend.vercel.app'
+  methods: ['GET','POST','PATCH','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
+  credentials: true
+}));
+
 server.use(router);
 
 module.exports = server;
