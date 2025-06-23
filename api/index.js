@@ -1,12 +1,19 @@
 const jsonServer = require('json-server');
-const path = require('path');
-const cors = require('cors');
-
 const server = jsonServer.create();
-const router = jsonServer.router(path.join(__dirname, '..', 'db.json'));
+const router = jsonServer.router('db.json');
 const middlewares = jsonServer.defaults();
 
-server.use(cors()); 
+server.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // permite qualquer origem
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+  next();
+});
+
 server.use(middlewares);
 server.use(router);
 
